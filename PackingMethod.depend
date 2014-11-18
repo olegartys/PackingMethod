@@ -1,0 +1,37 @@
+# depslib dependency file v1.0
+1416333847 source:/home/olegartys/code/PackingMethod/src/alphabet.cxx
+	"alphabet.h"
+	<string>
+	<vector>
+	<algorithm>
+	<cmath>
+	<fstream>
+	<iostream>
+
+1416333758 /home/olegartys/code/PackingMethod/src/alphabet.h
+	<string>
+	<vector>
+	<fstream>
+
+1416339073 source:/home/olegartys/code/PackingMethod/src/compressor.cxx
+	"compressor.h"
+	<map>
+	<vector>
+	<iostream>
+
+1416338372 /home/olegartys/code/PackingMethod/src/compressor.h
+	<map>
+	<string>
+	"alphabet.h"
+
+1416335155 source:/home/olegartys/code/PackingMethod/src/packing_method.cxx
+	<iostream>
+	<cerrno>
+	<string>
+	<fstream>
+	<cstdlib>
+	"packing_method.h"
+	"compressor.h"
+
+1416257280 /home/olegartys/code/PackingMethod/src/packing_method.h
+
