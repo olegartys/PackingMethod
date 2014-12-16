@@ -13,7 +13,6 @@ using namespace std;
 void Compressor::createCodingTable (void)
 {
     char index = 0;
-    //for_each (alphabet->alphabetArr.begin(), alphabet->alphabetArr.end(), [&](vector<char>::iterator it){codingTable[*it] = index++;});
     for (auto it = alphabet->alphabetArr.begin (); it != alphabet->alphabetArr.end (); it++) {
        codingTable[*it] = index;
        index++;
@@ -78,19 +77,6 @@ void Compressor::createEncodedInformation (void)
 	buffer.clear();
 	for (char c : s)
         encodedInformation.append(encodeSymbol(c));
-
-    /*const size_t BUFF_SIZE  = 12 * sizeof(char);
-	while (!(inputFile->eof())) {
-        char* memblock = new char [BUFF_SIZE];
-		//inputFile->read (memblock, BUFF_SIZE);
-		int c;
-        c = inputFile->get();
-		//for (int i = 0; i < BUFF_SIZE; i++) {
-            encodedInformation += encodeSymbol (c);
-            cout << (char)c << " " ;
-        //}
-		delete[] memblock;
-	}*/
 }
 
 /* Write encoded string into output file */
@@ -137,59 +123,6 @@ void Compressor::writeEncodedInformation(void)
     for_each (v.begin(), v.end(), [this](char c){outputFile->write((char*)&c, sizeof(char));});
 }
 
-/*//FIXME : Why does it works?
-void Compressor::writeEncodedInformation (void)
-{
-    int i = 0, res = 0;
-    char* s = new char [sizeof(char)];
-    // Writing size of one element
-    s[0] = alphabet->sizeOfOneElement;
-    outputFile->write (s, sizeof (char));
-
-    //Writing count of the first elements that placing at the beginning of the file,
-    //because after compressing it will be 0 and we couldn't get how much of them there were
-    size_t x = encodedInformation.length ();
-    cout << "Length of encodedInf : " << x << endl;
-    if (x % 8 == 0)
-        magicNumber = 0;
-    else
-        magicNumber = (8 - x%8);// / this->alphabet->sizeOfOneElement ;
-
-    outputFile->write ((char *)&magicNumber, sizeof (char));
-
-    // Elements that would be written to the output file
-    vector<char> v;
-
-    for (int it  = encodedInformation.length()-1; it >= 0; it--) {
-        if (i <= 7) {
-            res += pow (2, i) * (int)(encodedInformation[it] - '0');
-            //std::cout << "x = " << (int)(this->encodedInformation[it] - '0');
-            i++;
-        }
-        else {
-            it += 1;
-            i = 0;
-            v.push_back (res);
-            //std::cout << "r = " << res << std::endl;
-            //std::cout << std::endl;
-            res = 0;
-        }
-        //std::cout << (int)(this->encodedInformation[it] - '0');
-    }
-    s[0] = res;
-    outputFile->write (s, sizeof (char));
-    //v.push_back (res);
-    reverse (v.begin(), v.end());
-    for (auto it = v.begin(); it != v.end(); it++) {
-        s[0] = *it;
-        outputFile->write (s, sizeof (char));
-    }
-
-    delete[] s;
-    //std::cout << "r = " << res << std::endl;
-}*/
-
-
 Compressor::Compressor (std::ifstream& inputFile, std::ofstream& outputFile)
 {
     this->inputFile = &inputFile;
@@ -216,12 +149,6 @@ cout << encodedInformation;
 #endif
 
     return err_code;
-}
-
-Compressor::~Compressor ()
-{
-    //inputFile->close();
-    //outputFile->close();
 }
 
 /***************************************DEBUG********************************/

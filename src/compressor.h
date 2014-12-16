@@ -41,7 +41,6 @@ class Compressor
 
 public:
 	Compressor (std::ifstream& inputFile, std::ofstream& outputFile);
-	~Compressor ();
 	void stdoutCodingTable (void);
 	int startCompression (void);
 };
