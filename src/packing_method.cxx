@@ -21,55 +21,64 @@
  *
  */
 
-
-#include <iostream>
-#include <cerrno>
-#include <string>
-#include <fstream>
-#include <cstdlib>
 #include "packing_method.h"
-#include "compressor.h"
+
+using namespace std;
 
 /* Opens an input file */
-void openInputFile (std::ifstream& inputFile, const char *path)
+void openInputFile (ifstream& inputFile, const char* path)
 {
-	/*inputFile.exceptions(std::ios::failbit);
+	inputFile.exceptions(std::ios::failbit);
 	try {
 		inputFile.open (path, std::ifstream::in);
 	} catch (std::ios_base::failure &fail) {
-		std::cerr << "Can't open file " << path <<"!\n";
+        perror (path);
 		exit (EXIT_FAILURE);
-	}*/
-	inputFile.open (path, std::ifstream::in | std::ifstream::binary);
+	}
+	/*inputFile.open (path, ifstream::in | ifstream::binary);
 	if (inputFile == NULL) {
 		perror (path);
 		exit (EXIT_FAILURE);
-	}
+	}*/
 }
 
-int main(int argc, char **argv)
+/* Open an output file */
+//FIXME : ADD CHECK FOR EXISTANCE
+void openOutputFile (ofstream& outputFile, const char* path)
 {
-	if (argc < 2) {
-		std::cerr << "No input arguments.\nUsage: " << PROGRAM_NAME << " [FILE]\n";
-		exit (EXIT_FAILURE);
-	}
-	const char *path = argv[1];
+    try {
+        outputFile.open (path, ofstream::out | ofstream::binary);
+    } catch (std::ios_base::failure &fail) {
+        perror (path);
+        exit (EXIT_FAILURE);
+    }
+}
 
-	std::ifstream inputFile;
-	openInputFile (inputFile, path);
+/* Generate output file name path */
+const char* genOutputFileName (const char* inputFilePath, MODE mode)
+{
+    char* t = NULL;
+    switch (mode) {
+        case COMPRESS :
+        {
+            //Add FILENAME_SUFFIX to th end of file name
+            const size_t SIZE = sizeof(char) * (strlen (inputFilePath) + strlen (FILENAME_SUFFIX)) + sizeof(char);
+            t = new char[SIZE];
+            memcpy (t, inputFilePath, strlen (inputFilePath));
+            strcat (t, FILENAME_SUFFIX);
+            t[SIZE] = '\0';
+            break;
+        }
 
-	Alphabet mainAlphabet (inputFile);
-
-	std::string s = mainAlphabet.getAlphabetString ();
-	/*for (std::string::iterator it = s.begin (); it != s.end(); it++)
-		std::cout << static_cast<int>(*it) << " : " << *it << std::endl;*/
-	//std::cout << alphabet.getAlphabetString () << std::endl << alphabet.getSizeOfOneElement () << std::endl;
-	//std::cout << "Size of one element: " << alphabet.getSizeOfOneElement () << std::endl;
-
-	Compressor mainCompressor (mainAlphabet);
-    mainCompressor.getCodingTable ();
-	int i;
-	std::cin >> i;
-	return 0;
+        case DECOMPRESS :
+        {
+            t = new char[sizeof(char) * (strlen (inputFilePath))];
+            memcpy (t, inputFilePath, strlen(FILENAME_SUFFIX));
+            t[strlen(t)-1] = 'M';
+            t[strlen(t)+1] = '\0';
+            break;
+        }
+    }
+    return t;
 }
 

@@ -1,15 +1,48 @@
+/*
+ *
+ * compressor.h
+ * 18.11.14
+ * Created by Oleg Lyovin <olegartys@gmail.com>
+ *
+ * Class that realizes compression of input information
+ *
+ */
+
+#ifndef COMPRESSOR_H
+#define COMPRESSOR_H
+
+//#define DEBUG
+
 #include <map>
-#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+#include <sstream>
 #include "alphabet.h"
 
 class Compressor
 {
-    Alphabet alphabet;
+    Alphabet* alphabet;
+    std::ifstream* inputFile;
+    std::ofstream* outputFile;
+
 	std::map<char, char> codingTable;
-	std::string codedInformation;
+	std::string encodedInformation;
+
+	uint8_t magicNumber;
 
 	void createCodingTable (void);
-	public:
-		Compressor (Alphabet &alphabet);
-		void getCodingTable (void);
+	void writeCodingTable (void);
+	void createEncodedInformation (void);
+	std::string encodeSymbol (const char c);
+	void writeEncodedInformation (void);
+
+public:
+	Compressor (std::ifstream& inputFile, std::ofstream& outputFile);
+	~Compressor ();
+	void stdoutCodingTable (void);
+	int startCompression (void);
 };
+#endif

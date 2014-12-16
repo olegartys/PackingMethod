@@ -10,22 +10,25 @@
  *
  */
 
+#ifndef ALPHABET_H
+#define ALPHABET_H
+
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <cmath>
 #include <fstream>
+#include <iostream>
+#include <cstring>
+#include <sstream>
 
 class Alphabet
 {
-	std::vector<char> alphabetArr;
-	size_t sizeOfOneElement;
+    public:
+        std::vector<char> alphabetArr;
+        uint8_t sizeOfOneElement;
 
-	public:
 		Alphabet (std::ifstream& inputFile);
 		std::string getAlphabetString (void);
-		std::vector<char> getAlphabet (void);
-		size_t getSizeOfOneElement (void);
-
-		/*void changeSizeOfOneElement (void);
-		std::vector<char> getAlphabet (void);
-		void addElementsToAlphabet (const std::string& s);*/
 };
+#endif

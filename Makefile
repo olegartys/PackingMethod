@@ -1,7 +1,7 @@
-CC=g++
+CC=g++ -std=c++11
 INSTALL_PATH=/usr/share
 SRCDIR=./src
-FILES=$(SRCDIR)/packing_method.cxx $(SRCDIR)/alphabet.cxx $(SRCDIR)/compressor.cxx
+FILES=$(SRCDIR)/main.cxx $(SRCDIR)/packing_method.cxx $(SRCDIR)/alphabet.cxx $(SRCDIR)/compressor.cxx $(SRCDIR)/decompressor.cxx
 
 EasyExam:
 	$(CC) $(FILES) -o packing_method

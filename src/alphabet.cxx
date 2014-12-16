@@ -6,78 +6,56 @@
  */
 
 #include "alphabet.h"
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <cmath>
-#include <fstream>
-#include <iostream>
 
-bool sort_func (int i, int j) {return i < j;}
+using namespace std;
 
-Alphabet::Alphabet (std::ifstream& inputFile)
+// FIXME : READIN FILE BY BLOCKS
+/* Parsing input file and init alphabet (all different symbols are included once a time) */
+Alphabet::Alphabet (ifstream& inputFile)
 {
-	std::string s;
+	stringstream buffer;
+	buffer << inputFile.rdbuf();
+
+	string s = buffer.str();
+	buffer.clear();
+
+	for (char c : s) {
+        vector<char>::const_iterator symbol = find (alphabetArr.begin(), alphabetArr.end(), c);
+        if (symbol == alphabetArr.end())
+            alphabetArr.push_back (c);
+	}
 
 	/* Getting information by blocks from a file and adding new elements
 	 * alphabetArr if necessary
 	 */
-	size_t size = 1024 * sizeof(char);
-	char* memblock = new char [size];
+	/*size_t BUF_SIZE = 1 * sizeof(char);
+	char* memblock = new char [BUF_SIZE];
 	while (!inputFile.eof()) {
-		inputFile.read (memblock, size);
-		s = static_cast<std::string> (memblock);
-		for (std::string::const_iterator it = s.begin(); it != s.end(); it++) {
-			std::vector<char>::iterator it1 = std::find (this->alphabetArr.begin(), this->alphabetArr.end(), static_cast<char>(*it));
-			if (it1 == this->alphabetArr.end())
-				this->alphabetArr.push_back (static_cast<char>(*it));
+        //reading symbols from file to memblock
+		inputFile.read (memblock, BUF_SIZE);
+		s.assign(memblock, memblock+BUF_SIZE);
+        //cout << s;
+		for (auto it = s.begin(); it != s.end(); it++) {
+            //searching in memblock for a new symbol
+			vector<char>::iterator symbol = find (this->alphabetArr.begin(), this->alphabetArr.end(), static_cast<char>(*it));
+			//if new symbol finded then adding it to the alphabet
+			if (symbol == alphabetArr.end())
+				alphabetArr.push_back (static_cast<char>(*it));
 		}
-	}
+		delete[] memblock;
+	}*/
 
-	/*Counting size of one element for a new alphabet*/
-	unsigned int i = 1;
-	while (pow(2, i) < this->alphabetArr.size()) {
-		i++;
-	}
-	this->sizeOfOneElement = i;
+	/* Counting size of one element for a new alphabet */
+	uint8_t i = 1;
+	while (pow(2, i++) < alphabetArr.size());
 
-
-	//std::sort (alphabetArr.begin(), alphabetArr.end(), sort_func);
+	sizeOfOneElement = i-1;
 }
 
-std::vector<char> Alphabet::getAlphabet (void)
-{
-    return this->alphabetArr;
-}
 
-std::string Alphabet::getAlphabetString (void)
+string Alphabet::getAlphabetString (void)
 {
-	std::string s;
-	for (std::vector<char>::iterator it = alphabetArr.begin(); it != alphabetArr.end(); it++)
-		s += *it;
+	string s;
+	for_each (alphabetArr.begin(), alphabetArr.end(), [&](char c) {s.push_back(c);});
 	return s;
 }
-
-size_t Alphabet::getSizeOfOneElement (void)
-{
-	return this->sizeOfOneElement;
-}
-
-/*void Alphabet::addElementsToAlphabet (const std::string& s)
-{
-	for (std::string::const_iterator it = s.begin(); it != s.end(); it++) {
-		std::vector<char>::iterator it1 = std::find (this->Alphabet.begin(), this->Alphabet.end(), static_cast<char>(*it));
-		if (it1 == this->Alphabet.end())
-			this->Alphabet.push_back (static_cast<char>(*it));
-	}
-	Alphabet::changeSizeOfOneElement ();
-}
-
-void Alphabet::changeSizeOfOneElement (void)
-{
-	unsigned int i = 1;
-	while (pow(2, i) < this->Alphabet.size()) {
-		i++;
-	}
-	this->sizeOfOneElement = i;
-}*/
