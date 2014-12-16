@@ -2,6 +2,6 @@
 #define VERSION_H
 
 #define PROGRAM_NAME "packing_method"
-#define VERSION 0.0
+#define VERSION 0.1
 
 #endif
